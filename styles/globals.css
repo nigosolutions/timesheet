@@ -1,0 +1,34 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.dash {
+  padding: 25px;
+}
+
+.dash .logo {
+  width: 150px;
+  height: 93px;
+  margin-bottom: 10px;
+  float: right;
+}
+.dash .dash-div {
+  clear: right;
+}
+
+.dash .dash-text {
+  margin-top: 45px;
+}

@@ -1,0 +1,18 @@
+.container {
+  margin-top: 25px;
+  padding: 30px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.clickableRed,
+.clickableGreen {
+  cursor: pointer;
+}
+
+.clickableRed:hover {
+  color: red;
+}
+
+.clickableGreen:hover {
+  color: darkgreen;
+}
