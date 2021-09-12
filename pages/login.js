@@ -52,7 +52,7 @@ export default function Home() {
       <div className={styles.Login}>
         <form onSubmit={login}>
           <img src="logo.png" className={styles.logo}></img>
-          <div class="input-group mb-3">
+          <div class="input-group mb-3" style={{ width: "350px" }}>
             <span class="input-group-text" id="basic-addon1">
               <i class="fas fa-user"></i>
             </span>
@@ -66,7 +66,7 @@ export default function Home() {
               ref={pfid}
             />
           </div>
-          <div class="input-group mb-3">
+          <div class="input-group mb-3" style={{ width: "350px" }}>
             <span class="input-group-text" id="basic-addon1">
               <i class="fas fa-lock"></i>
             </span>

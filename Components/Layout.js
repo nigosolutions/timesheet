@@ -67,85 +67,6 @@ const Layout = ({ children, title, user }) => {
                     >
                       Change Password
                     </a>
-                    <div
-                      class="modal fade"
-                      id="exampleModal"
-                      tabindex="-1"
-                      aria-labelledby="exampleModalLabel"
-                      aria-hidden="true"
-                    >
-                      <div class="modal-dialog">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">
-                              Change Password
-                            </h5>
-                            <button
-                              type="button"
-                              class="btn-close"
-                              data-bs-dismiss="modal"
-                              aria-label="Close"
-                            ></button>
-                          </div>
-                          <div class="modal-body">
-                            <div class="mb-3">
-                              <label
-                                for="formGroupExampleInput"
-                                class="form-label"
-                              >
-                                Old Password:
-                              </label>
-                              <input
-                                type="text"
-                                class="form-control"
-                                id="formGroupExampleInput"
-                                placeholder="Enter old password"
-                              ></input>
-                            </div>
-                            <div class="mb-3">
-                              <label
-                                for="formGroupExampleInput2"
-                                class="form-label"
-                              >
-                                New Password:
-                              </label>
-                              <input
-                                type="text"
-                                class="form-control"
-                                id="formGroupExampleInput2"
-                                placeholder="Enter new password"
-                              ></input>
-                            </div>
-                            <div class="mb-3">
-                              <label
-                                for="formGroupExampleInput2"
-                                class="form-label"
-                              >
-                                Renter New Password:
-                              </label>
-                              <input
-                                type="text"
-                                class="form-control"
-                                id="formGroupExampleInput2"
-                                placeholder="Enter new password"
-                              ></input>
-                            </div>
-                          </div>
-                          <div class="modal-footer">
-                            <button
-                              type="button"
-                              class="btn btn-secondary"
-                              data-bs-dismiss="modal"
-                            >
-                              Close
-                            </button>
-                            <button type="button" class="btn btn-primary">
-                              Save changes
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
                     <hr class="dropdown-divider"></hr>
                     <button class="dropdown-item" onClick={logout}>
                       Logout
@@ -155,7 +76,78 @@ const Layout = ({ children, title, user }) => {
               </ul>
             </div>
           </div>
+          <div
+            class="modal fade"
+            id="exampleModal"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">
+                    Change Password
+                  </h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <div class="mb-3">
+                    <label for="formGroupExampleInput" class="form-label">
+                      Old Password:
+                    </label>
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="formGroupExampleInput"
+                      placeholder="Enter old password"
+                    ></input>
+                  </div>
+                  <div class="mb-3">
+                    <label for="formGroupExampleInput2" class="form-label">
+                      New Password:
+                    </label>
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="formGroupExampleInput2"
+                      placeholder="Enter new password"
+                    ></input>
+                  </div>
+                  <div class="mb-3">
+                    <label for="formGroupExampleInput2" class="form-label">
+                      Renter New Password:
+                    </label>
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="formGroupExampleInput2"
+                      placeholder="Enter new password"
+                    ></input>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-dark"
+                    data-bs-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                  <button type="button" class="btn btn-danger">
+                    Save changes
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </nav>
+
         <br />
         {children}
       </div>

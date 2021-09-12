@@ -14,7 +14,7 @@ app
   .then(() => {
     const server = express();
     const userApis = require("./routes/userApis.js");
-
+    const passApis = require("./routes/passApis.js");
     server.use(
       session({
         secret: process.env.SECRET_KEY,
@@ -27,6 +27,7 @@ app
     server.use(bodyParser.json());
     server.use(bodyParser.raw());
     server.use("/userApi", userApis(server));
+    server.use("/passApi", passApis(server));
 
     server.get("*", (req, res) => {
       return handle(req, res);

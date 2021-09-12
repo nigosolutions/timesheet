@@ -4,6 +4,9 @@ import Head from "next/head";
 import Layout from "../Components/Layout";
 import ImageCapture from "../Components/ImageCapture";
 import Multiselect from "multiselect-react-dropdown";
+import axios from "axios";
+import { toast } from "react-toastify";
+import Router from "next/router";
 
 export async function getServerSideProps(context) {
   let name = context.req.session.user_name ? context.req.session.user_name : "";
@@ -31,6 +34,32 @@ export default function Dashboard(props) {
   const newRow_referenceNo = useRef("");
   const newRow_upload = useRef(null);
   const [startCamera, setstartCamera] = useState(false);
+  const PFID = useRef("");
+  const REF = useRef("");
+  const DI = useRef("");
+  const DE = useRef("");
+
+  const SingleEntry = () => {
+    event.preventDefault();
+    let data = {
+      PFID: PFID.current.value,
+      REF: REF.current.value,
+      DI: DI.current.value,
+      DE: DE.current.value,
+      SITE: addPass_Sites_SelectedValues,
+    };
+    axios
+      .post("passApi/addPass", data)
+      .then((res) => {
+        console.log(res);
+        toast.success(res.data.mssg);
+        Router.push("/");
+      })
+      .catch((error) => {
+        if (error.response) toast.error(error.response.data.mssg);
+        else toast.error("Network Error!");
+      });
+  };
 
   const onSelect_addPass_Sites = (item) => {
     let sites = [...addPass_Sites_SelectedValues];
@@ -61,7 +90,7 @@ export default function Dashboard(props) {
       </Head>
       <div className={styles.container}>
         <div class="row">
-          <div class="col-sm-6">
+          <div class="col-sm-4">
             <div class="card">
               <div class="card-body">
                 <h5 class="card-title">Add Passes</h5>
@@ -106,8 +135,9 @@ export default function Dashboard(props) {
                             <input
                               type="number"
                               class="form-control"
-                              id="formGroupExampleInput"
+                              id="PFID"
                               placeholder="Enter PFID No."
+                              ref={PFID}
                             ></input>
                           </div>
                           <div class="mb-3">
@@ -145,8 +175,9 @@ export default function Dashboard(props) {
                             <input
                               type="number"
                               class="form-control"
-                              id="formGroupExampleInput"
+                              id="REF"
                               placeholder="Enter Pass Reference No."
+                              ref={REF}
                             ></input>
                           </div>
                           <div class="row g-3">
@@ -160,8 +191,9 @@ export default function Dashboard(props) {
                               <input
                                 type="date"
                                 class="form-control"
-                                id="formGroupExampleInput2"
-                                placeholder="Select Date"
+                                id="DI"
+                                placeholder="Select IssueDate"
+                                ref={DI}
                               ></input>
                             </div>
                             <div class="col-md-6">
@@ -175,7 +207,8 @@ export default function Dashboard(props) {
                                 type="date"
                                 class="form-control"
                                 id="formGroupExampleInput2"
-                                placeholder="Select Date"
+                                placeholder="Select Expiry Date"
+                                ref={DE}
                               ></input>
                             </div>
                           </div>
@@ -220,7 +253,11 @@ export default function Dashboard(props) {
                           >
                             Cancel
                           </button>
-                          <button type="button" class="btn btn-danger">
+                          <button
+                            onClick={SingleEntry}
+                            type="button"
+                            class="btn btn-danger"
+                          >
                             Add Pass
                           </button>
                         </div>
@@ -472,7 +509,7 @@ export default function Dashboard(props) {
               </div>
             </div>
           </div>
-          <div class="col-sm-6">
+          <div class="col-sm-4">
             <div class="card">
               <div class="card-body">
                 <h5 class="card-title">Update Passes</h5>
@@ -520,7 +557,7 @@ export default function Dashboard(props) {
                               PFID:
                             </label>
                             <input
-                              type="datenumber"
+                              type="number"
                               class="form-control"
                               id="formGroupExampleInput2"
                               placeholder="Enter PFID"
@@ -581,6 +618,129 @@ export default function Dashboard(props) {
                                   <span class="badge bg-danger">
                                     {" "}
                                     <i class="fas fa-ban"> </i> Cancel
+                                  </span>
+                                </a>
+                              </td>
+                              <td>Cancelled</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <div class="card">
+              <div class="card-body">
+                <h5 class="card-title">View/Download Passes</h5>
+                <p class="card-text">
+                  You can view and download the stored gate passes here!
+                </p>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end ">
+                  <a
+                    href="#"
+                    class="btn btn-dark"
+                    data-bs-toggle="modal"
+                    data-bs-target="#vpass"
+                  >
+                    View/Download
+                  </a>
+                </div>
+                <div
+                  class="modal fade"
+                  id="vpass"
+                  tabindex="-1"
+                  aria-labelledby="exampleModalLabel"
+                  aria-hidden="true"
+                >
+                  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                          View/Download Pass
+                        </h5>
+                        <button
+                          type="button"
+                          class="btn-close"
+                          data-bs-dismiss="modal"
+                          aria-label="Close"
+                        ></button>
+                      </div>
+                      <div class="modal-body">
+                        <h6>Search Pass:</h6>
+                        <div class="row g-3">
+                          <div class="col-md-6">
+                            <label
+                              for="formGroupExampleInput2"
+                              class="form-label"
+                            >
+                              PFID:
+                            </label>
+                            <input
+                              type="number"
+                              class="form-control"
+                              id="formGroupExampleInput2"
+                              placeholder="Enter PFID"
+                            ></input>
+                          </div>
+                          <div class="col-md-6">
+                            <label
+                              for="formGroupExampleInput2"
+                              class="form-label"
+                            >
+                              Gate Pass Reference No.:
+                            </label>
+                            <input
+                              type="number"
+                              class="form-control"
+                              id="formGroupExampleInput2"
+                              placeholder="Enter Reference No."
+                            ></input>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button
+                          type="button"
+                          class="btn btn-dark"
+                          data-bs-dismiss="modal"
+                        >
+                          Cancel
+                        </button>
+                        <button type="button" class="btn btn-danger">
+                          Search
+                        </button>
+
+                        <table class="table table-hover">
+                          <thead>
+                            <tr>
+                              <th scope="col">#</th>
+                              <th scope="col">Site(s)</th>
+                              <th scope="col">Date of Expiry</th>
+                              <th scope="col">Actions</th>
+                              <th scope="col">Status</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <th scope="row">1</th>
+                              <td>Mark</td>
+                              <td>Otto</td>
+                              <td>
+                                <a class="me-1" href="">
+                                  <span class="badge bg-dark">
+                                    {" "}
+                                    <i class="fas fa-edit"> </i> View
+                                  </span>
+                                </a>
+
+                                <a href="">
+                                  <span class="badge bg-danger">
+                                    {" "}
+                                    <i class="fas fa-ban"> </i> Download
                                   </span>
                                 </a>
                               </td>
