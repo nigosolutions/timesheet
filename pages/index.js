@@ -1,30 +1,14 @@
 import styles from "../styles/dashboard.module.css";
 import { useState, useRef } from "react";
-import Head from "next/head";
 import Layout from "../Components/Layout";
 import ImageCapture from "../Components/ImageCapture";
 import Multiselect from "multiselect-react-dropdown";
 import axios from "axios";
 import { toast } from "react-toastify";
 import Router from "next/router";
+import { authenticate } from "../hoc/auth";
 
-export async function getServerSideProps(context) {
-  let name = context.req.session.user_name ? context.req.session.user_name : "";
-  let role = context.req.session.user_role ? context.req.session.user_role : "";
-
-  if (name && role) {
-    return {
-      props: { name: name, role: role },
-    };
-  } else {
-    return {
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      },
-    };
-  }
-}
+export const getServerSideProps = authenticate();
 
 export default function Dashboard(props) {
   const [addPass_Sites_SelectedValues, set_AddPass_Sites_SelectedValues] =
@@ -38,6 +22,14 @@ export default function Dashboard(props) {
   const REF = useRef("");
   const DI = useRef("");
   const DE = useRef("");
+
+  const clearFieldsforEntry = () => {
+    PFID.current.value = "";
+    REF.current.value = "";
+    DI.current.value = "";
+    DE.current.value = "";
+    set_AddPass_Sites_SelectedValues([]);
+  };
 
   const SingleEntry = () => {
     event.preventDefault();
@@ -53,7 +45,7 @@ export default function Dashboard(props) {
       .then((res) => {
         console.log(res);
         toast.success(res.data.mssg);
-        Router.push("/");
+        document.getElementById("singleEntryClose").click();
       })
       .catch((error) => {
         if (error.response) toast.error(error.response.data.mssg);
@@ -72,22 +64,23 @@ export default function Dashboard(props) {
   };
 
   const addTableRowMultipleSites = (pfid, refernceNo, upload = null) => {
-    let tableRows = [...tableRowsMultipleSites];
-    let row = {
-      pfid: pfid,
-      refernceNo: refernceNo,
-      upload: upload,
-    };
-    tableRows.push(row);
-    set_tableRowsMultipleSites(tableRows);
-    newRow_pfid.current.value = newRow_referenceNo.current.value = "";
+    if (pfid) {
+      let tableRows = [...tableRowsMultipleSites];
+      let row = {
+        pfid: pfid,
+        refernceNo: refernceNo,
+        upload: upload,
+      };
+      tableRows.push(row);
+      set_tableRowsMultipleSites(tableRows);
+      newRow_pfid.current.value = newRow_referenceNo.current.value = "";
+    } else {
+      toast.error("Please enter a PFID");
+    }
   };
 
   return (
     <Layout title="Pass Manager" user={props.name}>
-      <Head>
-        <title>Pass Manager</title>
-      </Head>
       <div className={styles.container}>
         <div class="row">
           <div class="col-sm-4">
@@ -109,6 +102,7 @@ export default function Dashboard(props) {
                     id="sentry"
                     tabindex="-1"
                     aria-labelledby="exampleModalLabel"
+                    data-bs-backdrop="static"
                     aria-hidden="true"
                   >
                     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
@@ -122,6 +116,7 @@ export default function Dashboard(props) {
                             class="btn-close"
                             data-bs-dismiss="modal"
                             aria-label="Close"
+                            onClick={clearFieldsforEntry}
                           ></button>
                         </div>
                         <div class="modal-body">
@@ -249,7 +244,9 @@ export default function Dashboard(props) {
                           <button
                             type="button"
                             class="btn btn-dark"
-                            data-bs-toggle="modal"
+                            data-bs-dismiss="modal"
+                            id="singleEntryClose"
+                            onClick={clearFieldsforEntry}
                           >
                             Cancel
                           </button>
@@ -320,6 +317,8 @@ export default function Dashboard(props) {
                   >
                     Multiple Entries
                   </button>
+
+                  {/* ====== MULTIPLE ENTRY MODAL START ====== */}
                   <div
                     class="modal fade"
                     id="mentry"
@@ -378,7 +377,8 @@ export default function Dashboard(props) {
                                 type="date"
                                 class="form-control"
                                 id="formGroupExampleInput2"
-                                placeholder="Another input placeholder"
+                                placeholder="Date of Issue"
+                                ref={DI}
                               ></input>
                             </div>
                             <div class="col-md-6">
@@ -392,7 +392,8 @@ export default function Dashboard(props) {
                                 type="date"
                                 class="form-control"
                                 id="formGroupExampleInput2"
-                                placeholder="Another input placeholder"
+                                placeholder="Date of Expiry"
+                                ref={DE}
                               ></input>
                             </div>
                             <table class="table table-hover" id="tablee">
@@ -424,9 +425,7 @@ export default function Dashboard(props) {
                                     ))
                                   : null}
                                 <tr>
-                                  <th scope="row">
-                                    {tableRowsMultipleSites.length + 1}
-                                  </th>
+                                  <th scope="row">New</th>
                                   <td>
                                     <input
                                       type="number"
@@ -474,20 +473,6 @@ export default function Dashboard(props) {
                                 </tr>
                               </tbody>
                             </table>
-                            {/* <div class="d-grid d-md-flex justify-content-md-end">
-                              <button
-                                class="btn btn-primary"
-                                type="button"
-                                onClick={() =>
-                                  addTableRowMultipleSites(
-                                    newRow_pfid.current.value,
-                                    newRow_referenceNo.current.value
-                                  )
-                                }
-                              >
-                                Add PFID
-                              </button>
-                            </div> */}
                           </div>
                         </div>
                         <div class="modal-footer">
@@ -505,6 +490,7 @@ export default function Dashboard(props) {
                       </div>
                     </div>
                   </div>
+                  {/* ====== MULTIPLE ENTRY MODAL END ====== */}
                 </div>
               </div>
             </div>

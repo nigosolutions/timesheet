@@ -34,6 +34,20 @@ function routes(app) {
     );
   });
 
+  router.get("/getAllSites", (req, res) => {
+    sql.query(`SELECT (id, name) from sites`, (err, response) => {
+      if (err) {
+        console.log("error: ", err);
+        res.status(400).send({ mssg: "Error!" });
+      }
+
+      if (response.length) {
+        res.status(200).send({ data: response[0] });
+      }
+    });
+    res.status(400).send({ mssg: "Error!" });
+  });
+
   return router;
 }
 

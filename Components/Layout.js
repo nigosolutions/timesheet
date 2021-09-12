@@ -1,9 +1,22 @@
 import React from "react";
 import axios from "axios";
 import Router from "next/router";
+import Link from "next/link";
 import { toast } from "react-toastify";
+import Head from "next/head";
 
 const Layout = ({ children, title, user }) => {
+  let MenuItems = [
+    {
+      name: "Pass Manager",
+      url: "/",
+    },
+    {
+      name: "Time Sheet",
+      url: "/timesheet",
+    },
+  ];
+
   const logout = () => {
     axios
       .get("userApi/logout")
@@ -17,6 +30,9 @@ const Layout = ({ children, title, user }) => {
 
   return (
     <div>
+      <Head>
+        <title>ALTRAD | {title}</title>
+      </Head>
       <div className="dash">
         <img src="logo.png" className="logo"></img>
         <h2 className="dash-text">{title}</h2>
@@ -36,11 +52,20 @@ const Layout = ({ children, title, user }) => {
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="#">
-                    Pass Manager
-                  </a>
-                </li>
+                {MenuItems.map((menu) => (
+                  <li class="nav-item">
+                    <Link href={menu.url}>
+                      <a
+                        class={`nav-link ${
+                          title === menu.name ? "active" : ""
+                        }`}
+                        aria-current="page"
+                      >
+                        {menu.name}
+                      </a>
+                    </Link>
+                  </li>
+                ))}
               </ul>
               <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item dropdown">
